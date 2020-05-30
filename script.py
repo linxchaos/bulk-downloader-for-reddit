@@ -287,6 +287,10 @@ def main():
     if arguments.set_default_directory:
         Config(GLOBAL.configDirectory).setDefaultDirectory()
         sys.exit()
+
+    if arguments.create_local_config:
+        JsonFile(".\\config.json").add(GLOBAL.config)
+        sys.exit()
         
     if arguments.directory:
         GLOBAL.directory = Path(arguments.directory.strip())
