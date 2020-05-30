@@ -92,3 +92,6 @@ class ImgurLimitError(Exception):
 
 class DirectLinkNotFound(Exception):
     pass
+
+class InvalidJSONFile(Exception):
+    pass

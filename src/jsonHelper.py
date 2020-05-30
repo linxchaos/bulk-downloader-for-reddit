@@ -1,6 +1,8 @@
 import json
 from os import path, remove
 
+from src.errors import InvalidJSONFile
+
 class JsonFile:
     """ Write and read JSON files
 
@@ -17,8 +19,11 @@ class JsonFile:
             self.__writeToFile({},create=True)
 
     def read(self):
+        try:
             with open(self.FILEDIR, 'r') as f:
                 return json.load(f)
+        except json.decoder.JSONDecodeError:
+            raise InvalidJSONFile(f"{self.FILEDIR} cannot be read")
 
     def add(self,toBeAdded,sub=None):
         """Takes a dictionary and merges it with json file.

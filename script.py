@@ -23,7 +23,7 @@ from src.downloaders.selfPost import SelfPost
 from src.downloaders.vreddit import VReddit
 from src.downloaders.youtube import Youtube
 from src.downloaders.gifDeliveryNetwork import GifDeliveryNetwork
-from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, full_exc_info
+from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, full_exc_info
 from src.parser import LinkDesigner
 from src.searcher import getPosts
 from src.utils import (GLOBAL, createLogFile, nameCorrector,
@@ -273,8 +273,13 @@ def main():
         GLOBAL.configDirectory = Path("config.json")
     else:
         GLOBAL.configDirectory = GLOBAL.defaultConfigDirectory  / "config.json"
-
-    GLOBAL.config = Config(GLOBAL.configDirectory).generate()
+    try:
+        GLOBAL.config = Config(GLOBAL.configDirectory).generate()
+    except InvalidJSONFile as exception:
+        VanillaPrint(str(exception.__class__.__name__),">>",str(exception))
+        VanillaPrint("Resolve it or remove it to proceed")
+        input("\nPress enter to quit")
+        sys.exit()
 
     if arguments.set_filename:
         Config(GLOBAL.configDirectory).setCustomFileName()
