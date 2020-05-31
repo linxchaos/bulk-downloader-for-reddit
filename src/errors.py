@@ -98,3 +98,6 @@ class InvalidJSONFile(Exception):
 
 class FailedToDownload(Exception):
     pass
+
+class DomainInSkip(Exception):
+    pass

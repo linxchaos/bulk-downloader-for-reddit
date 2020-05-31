@@ -23,7 +23,7 @@ from src.downloaders.selfPost import SelfPost
 from src.downloaders.vreddit import VReddit
 from src.downloaders.youtube import Youtube
 from src.downloaders.gifDeliveryNetwork import GifDeliveryNetwork
-from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, full_exc_info
+from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, DomainInSkip, full_exc_info
 from src.parser import LinkDesigner
 from src.searcher import getPosts
 from src.utils import (GLOBAL, createLogFile, nameCorrector,
@@ -180,6 +180,12 @@ def download(submissions):
             duplicates += 1
             continue
 
+        if any(domain in submissions[i]['CONTENTURL'] for domain in GLOBAL.arguments.skip):
+            print()
+            print(submissions[i]['CONTENTURL'])
+            print("Domain found in skip domains, skipping post...")
+            continue
+
         try:
             downloadPost(details,directory)
             downloadedCount += 1
@@ -215,6 +221,11 @@ def download(submissions):
                 ),
                 submissions[i]
             ]})
+
+        except DomainInSkip:
+            print()
+            print(submissions[i]['CONTENTURL'])
+            print("Domain found in skip domains, skipping post...")
 
         except NoSuitablePost:
             print("No match found, skipping...")
