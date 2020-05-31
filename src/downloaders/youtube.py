@@ -2,10 +2,11 @@ import os
 import youtube_dl
 import sys
 
-from src.downloaders.downloaderUtils import getExtension, dlProgress
+from src.downloaders.downloaderUtils import getExtension, dlProgress, createHash
 
 from src.utils import GLOBAL
 from src.utils import printToFile as print
+from src.errors import FileAlreadyExistsError
 
 class Youtube:
     def __init__(self,directory,post):
@@ -27,6 +28,18 @@ class Youtube:
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
+
+        location = directory/(filename+".mp4")
+
+        if GLOBAL.arguments.no_dupes:
+            try:
+                fileHash = createHash(location)
+            except FileNotFoundError:
+                return None
+            if fileHash in GLOBAL.hashList:
+                os.remove(location)
+                raise FileAlreadyExistsError
+            GLOBAL.hashList.add(fileHash)
         
     @staticmethod
     def _hook(d):
