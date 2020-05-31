@@ -16,6 +16,7 @@ class Config():
         self._validateCredentials()
         self._readCustomFileName()
         self._readCustomFolderPath()
+        self._readDefaultOptions()
         return self.file.read()
 
     def setCustomFileName(self):
@@ -78,6 +79,27 @@ Existing folder structure""", None if "folderpath" not in self.file.read() else 
         if not "folderpath" in content:
             self.file.add({
                 "folderpath": "{SUBREDDIT}"
+            })
+
+    def setDefaultOptions(self):
+        print("""
+Type options to be used everytime script runs
+
+For example: --no-dupes --quit --limit 100 --skip youtube.com
+
+Existing default options:""", None if "options" not in self.file.read() else self.file.read()["options"])
+
+        options = input(">> ").strip("")
+
+        self.file.add({
+            "options": options
+        })
+
+    def _readDefaultOptions(self,path=None):
+        content = self.file.read()
+        if not "options" in content:
+            self.file.add({
+                "options": ""
             })
 
     def _validateCredentials(self):

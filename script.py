@@ -287,10 +287,6 @@ def printLogo():
 
 def main():
 
-
-    arguments = Arguments.parse()
-    GLOBAL.arguments = arguments
-
     if not Path(GLOBAL.defaultConfigDirectory).is_dir():
         os.makedirs(GLOBAL.defaultConfigDirectory)
 
@@ -306,6 +302,11 @@ def main():
         input("\nPress enter to quit")
         sys.exit()
 
+    sys.argv = sys.argv + GLOBAL.config["options"].split()
+
+    arguments = Arguments.parse()
+    GLOBAL.arguments = arguments
+
     if arguments.set_filename:
         Config(GLOBAL.configDirectory).setCustomFileName()
         sys.exit()
@@ -316,6 +317,10 @@ def main():
 
     if arguments.set_default_directory:
         Config(GLOBAL.configDirectory).setDefaultDirectory()
+        sys.exit()
+
+    if arguments.set_default_options:
+        Config(GLOBAL.configDirectory).setDefaultOptions()
         sys.exit()
 
     if arguments.use_local_config:
