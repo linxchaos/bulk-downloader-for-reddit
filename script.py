@@ -38,7 +38,7 @@ from src.store import Store
 
 __author__ = "Ali Parlakci"
 __license__ = "GPL"
-__version__ = "1.7.0"
+__version__ = "1.8.0"
 __maintainer__ = "Ali Parlakci"
 __email__ = "parlakciali@gmail.com"
 
