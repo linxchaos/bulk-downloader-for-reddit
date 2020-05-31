@@ -8,7 +8,7 @@ import hashlib
 
 from src.utils import nameCorrector, GLOBAL
 from src.utils import printToFile as print
-from src.errors import FileAlreadyExistsError, FileNameTooLong
+from src.errors import FileAlreadyExistsError, FileNameTooLong, FailedToDownload
 
 def dlProgress(count, blockSize, totalSize):
     """Function for writing download progress to console
@@ -79,7 +79,7 @@ def getFile(filename,shortFilename,folderDir,imageURL,indent=0, silent=False):
 
                 os.rename(tempDir,fileDir)
                 if not silent: print(" "*indent+"Downloaded"+" "*10)
-                break
+                return None
             except ConnectionResetError as exception:
                 if not silent: print(" "*indent + str(exception))
                 if not silent: print(" "*indent + "Trying again\n")
@@ -87,6 +87,7 @@ def getFile(filename,shortFilename,folderDir,imageURL,indent=0, silent=False):
                 filename = shortFilename
         else:
             raise FileAlreadyExistsError
+    raise FailedToDownload
 
 def createHash(filename):
     hash_md5 = hashlib.md5()
