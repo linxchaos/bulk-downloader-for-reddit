@@ -29,7 +29,7 @@ IMPORTANT: Do not change the filename structure frequently.
 
 Type a template file name for each post.
 
-You can use SUBREDDIT, REDDITOR, POSTID, TITLE, UPVOTES, FLAIR in curly braces
+You can use SUBREDDIT, REDDITOR, POSTID, TITLE, UPVOTES, FLAIR, DATE in curly braces
 The text in curly braces will be replaced with the corresponding property of an each post
 
 For example: {FLAIR}_{SUBREDDIT}_{REDDITOR}
@@ -61,7 +61,7 @@ Type a folder structure (generic folder path)
 
 Use slash or DOUBLE backslash to separate folders
 
-You can use SUBREDDIT, REDDITOR, POSTID, TITLE, UPVOTES, FLAIR in curly braces
+You can use SUBREDDIT, REDDITOR, POSTID, TITLE, UPVOTES, FLAIR, DATE in curly braces
 The text in curly braces will be replaced with the corresponding property of an each post
 
 For example: {REDDITOR}/{SUBREDDIT}/{FLAIR}

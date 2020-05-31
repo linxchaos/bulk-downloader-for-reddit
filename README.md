@@ -123,7 +123,7 @@ Example usage: **`-d .\`**
 ## **`--set-filename`**
 Starts the program to set a filename template to use for downloading posts. **Does not take any parameter.**
   
-When the programs starts, you will be prompted to type a filename template. Use `SUBREDDIT`, `REDDITOR`, `POSTID`, `TITLE`, `UPVOTES`, `FLAIR` in curly brakets `{ }` to refer to the corrosponding property of a post.
+When the programs starts, you will be prompted to type a filename template. Use `SUBREDDIT`, `REDDITOR`, `POSTID`, `TITLE`, `UPVOTES`, `FLAIR`, `DATE` in curly brakets `{ }` to refer to the corrosponding property of a post.
 
 ❗ Do NOT change the filename structure frequently. If you did, the program could not find duplicates and would download the already downloaded files again. This would not create any duplicates in the directory but the program would not be as snappy as it should be.
   
@@ -134,7 +134,7 @@ Example usage: **`--set-filename`**
 ## **`--set-folderpath`**
 Starts the program to set a folder structure  to use for downloading posts. **Does not take any parameter.**
   
-When the programs starts, you will be prompted to type a filename template. Use `SUBREDDIT`, `REDDITOR`, `POSTID`, `TITLE`, `UPVOTES`, `FLAIR` in curly brakets `{ }` to refer to the corrosponding property of a post. Do not put slashes `/` or backslashes `\` at either ends. For instance, **`{REDDITOR}/{SUBREDDIT}/{FLAIR}`**
+When the programs starts, you will be prompted to type a filename template. Use `SUBREDDIT`, `REDDITOR`, `POSTID`, `TITLE`, `UPVOTES`, `FLAIR`, `DATE` in curly brakets `{ }` to refer to the corrosponding property of a post. Do not put slashes `/` or backslashes `\` at either ends. For instance, **`{REDDITOR}/{SUBREDDIT}/{FLAIR}`**
   
 The default filename template is **`{SUBREDDIT}`**
 

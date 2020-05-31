@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import socket
+import time
 import webbrowser
 import urllib.request
 from urllib.error import HTTPError
@@ -219,7 +220,11 @@ def extractDetails(posts,SINGLE_POST=False):
                        'CONTENTURL':submission.url,
                        'SUBREDDIT':submission.subreddit.display_name,
                        'UPVOTES': submission.score,
-                       'FLAIR':submission.link_flair_text}
+                       'FLAIR':submission.link_flair_text,
+                       'DATE':str(time.strftime(
+                                      "%Y-%m-%d_%H-%M",
+                                      time.localtime(submission.created_utc)
+                                      ))}
         except AttributeError:
             pass
 
@@ -252,7 +257,11 @@ def extractDetails(posts,SINGLE_POST=False):
                             'CONTENTURL':submission.url,
                             'SUBREDDIT':submission.subreddit.display_name,
                             'UPVOTES': submission.score,
-                            'FLAIR':submission.link_flair_text}
+                            'FLAIR':submission.link_flair_text,
+                            'DATE':str(time.strftime(
+                                      "%Y-%m-%d_%H-%M",
+                                      time.localtime(submission.created_utc)
+                                      ))}
                 except AttributeError:
                     continue
 
