@@ -34,7 +34,7 @@ from src.config import Config
 from src.arguments import Arguments
 from src.programMode import ProgramMode
 from src.reddit import Reddit
-from src.file import File
+from src.store import Store
 
 __author__ = "Ali Parlakci"
 __license__ = "GPL"
@@ -335,7 +335,9 @@ def main():
         GLOBAL.directory = Path(input("\ndownload directory: ").strip())
 
     if arguments.downloaded_posts:
-        GLOBAL.downloadedPosts = File(arguments.downloaded_posts)
+        GLOBAL.downloadedPosts = Store(arguments.downloaded_posts)
+    else:
+        GLOBAL.downloadedPosts = Store()
 
     printLogo()
     print("\n"," ".join(sys.argv),"\n",noPrint=True)

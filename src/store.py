@@ -1,6 +1,6 @@
 from os import path
 
-class File:
+class Store:
     def __init__(self,directory=None):
         self.directory = directory
         if self.directory:
