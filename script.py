@@ -329,7 +329,7 @@ def main():
         
     if arguments.directory:
         GLOBAL.directory = Path(arguments.directory.strip())
-    elif "default_directory" in GLOBAL.config and GLOBAL.config["default_directory"] is not "":
+    elif "default_directory" in GLOBAL.config and GLOBAL.config["default_directory"] != "":
         GLOBAL.directory = Path(GLOBAL.config["default_directory"].format(time=GLOBAL.RUN_TIME))
     else:
         GLOBAL.directory = Path(input("\ndownload directory: ").strip())
