@@ -34,6 +34,7 @@ from src.config import Config
 from src.arguments import Arguments
 from src.programMode import ProgramMode
 from src.reddit import Reddit
+from src.file import File
 
 __author__ = "Ali Parlakci"
 __license__ = "GPL"
@@ -156,13 +157,15 @@ def download(submissions):
     subsLenght = len(submissions)
     global lastRequestTime
     lastRequestTime = 0
-    downloadedCount = 9
+    downloadedCount = 0
     duplicates = 0
 
     FAILED_FILE = createLogFile("FAILED")
 
     if GLOBAL.arguments.unsave:
         reddit = Reddit(GLOBAL.config['credentials']['reddit']).begin()
+
+    submissions = list(filter(lambda x: x['POSTID'] not in GLOBAL.downloadedPosts(), submissions))
         
     for i in range(len(submissions)):
         print(f"\n({i+1}/{subsLenght})",end=" — ")
@@ -193,6 +196,7 @@ def download(submissions):
 
         try:
             downloadPost(details,directory)
+            GLOBAL.downloadedPosts.add(details['POSTID'])
             try:
                 if GLOBAL.arguments.unsave:
                     reddit.submission(id=details['POSTID']).unsave()
@@ -268,7 +272,7 @@ def download(submissions):
               f"{duplicates} duplicate{'s' if duplicates > 1 else ''}")
 
     if downloadedCount == 0:
-        print("Nothing downloaded :(")
+        print("Nothing is downloaded :(")
 
     else:
         print(f"Total of {downloadedCount} " \
@@ -324,6 +328,9 @@ def main():
         GLOBAL.directory = Path(GLOBAL.config["default_directory"].format(time=GLOBAL.RUN_TIME))
     else:
         GLOBAL.directory = Path(input("\ndownload directory: ").strip())
+
+    if arguments.downloaded_posts:
+        GLOBAL.downloadedPosts = File(arguments.downloaded_posts)
 
     printLogo()
     print("\n"," ".join(sys.argv),"\n",noPrint=True)

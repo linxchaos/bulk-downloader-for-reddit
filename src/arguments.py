@@ -129,7 +129,12 @@ class Arguments:
 
         parser.add_argument("--no-dupes",
                             action="store_true",
-                            help="Remove duplicate posts on different subreddits",
+                            help="Do not download duplicate posts on different subreddits",
+                            ) 
+
+        parser.add_argument("--downloaded-posts",
+                            help="Use a hash file to keep track of downloaded files",
+                            type=str
                             ) 
 
         if arguments == []:
