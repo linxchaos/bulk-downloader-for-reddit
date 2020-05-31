@@ -154,7 +154,6 @@ def download(submissions):
     to download each one, catch errors, update the log files
     """
 
-    subsLenght = len(submissions)
     global lastRequestTime
     lastRequestTime = 0
     downloadedCount = 0
@@ -166,6 +165,7 @@ def download(submissions):
         reddit = Reddit(GLOBAL.config['credentials']['reddit']).begin()
 
     submissions = list(filter(lambda x: x['POSTID'] not in GLOBAL.downloadedPosts(), submissions))
+    subsLenght = len(submissions)
         
     for i in range(len(submissions)):
         print(f"\n({i+1}/{subsLenght})",end=" — ")
