@@ -318,7 +318,7 @@ def main():
         Config(GLOBAL.configDirectory).setDefaultDirectory()
         sys.exit()
 
-    if arguments.create_local_config:
+    if arguments.use_local_config:
         JsonFile(".\\config.json").add(GLOBAL.config)
         sys.exit()
         

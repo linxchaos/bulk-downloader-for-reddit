@@ -122,9 +122,9 @@ class Arguments:
                             help="Set a default directory to be used in case no directory is given",
                             )
 
-        parser.add_argument("--create-local-config",
+        parser.add_argument("--use-local-config",
                             action="store_true",
-                            help="Creates a config file in the program's directory. Useful for having multiple configs",
+                            help="Creates a config file in the program's directory and uses it. Useful for having multiple configs",
                             )
 
         parser.add_argument("--no-dupes",
