@@ -1,5 +1,4 @@
 import os
-import ffmpeg
 import subprocess
 
 from src.downloaders.downloaderUtils import getFile, getExtension
