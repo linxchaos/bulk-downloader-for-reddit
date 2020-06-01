@@ -15,13 +15,9 @@ However, binary version for Linux is being worked. So, stay tuned.
   
 OR, regardless of your operating system, you can fire up the program from the **source code**.
 
-```console
-python3 -m pip install -r -requirements.txt 
-```
+### `python3 -m pip install -r -requirements.txt`
 
-```console
-python3 script.py
-```
+### `python3 script.py`
 
 See the [Interpret from source code](docs/INTERPRET_FROM_SOURCE.md) page for more information.
 
