@@ -25,7 +25,7 @@ class Gfycat:
         shortFilename = POST['POSTID']+POST['EXTENSION']
        
         getFile(filename,shortFilename,directory,POST['MEDIAURL'])
-    
+
     @staticmethod
     def getLink(url):
         """Extract direct link to the video from page's source

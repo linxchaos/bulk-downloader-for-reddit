@@ -10,7 +10,6 @@ from urllib.error import HTTPError
 import praw
 from prawcore.exceptions import NotFound, ResponseException, Forbidden
 
-
 from src.reddit import Reddit
 from src.utils import GLOBAL, createLogFile, printToFile
 from src.jsonHelper import JsonFile
