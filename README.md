@@ -9,11 +9,21 @@ Please give feedback *(errors, feature requests, etc.)* on the [Issues](https://
 ## 🚀 How to use
 If you run **Windows**, after you extract the zip file, double-click on the *bulk-downloader-for-reddit.exe*. The program will guide you through. Also, take a look at the [Setting up the program](#🔨-setting-up-the-program) section. **However**, Bulk Dowloader for Reddit has a plenty of features which can only be activated via command line arguments. See [Options](#⚙-Options) for it.
 
-If you run **Linux**, there is a binary of the program which can be used through the Terminal. The program should still guide you through if you don't pass any arguments but you can also use [Options](#⚙-Options).
+Unfortunately, there is no binary for **MacOS** or **Linux**. If you are a MacOS or Linux user, you must use the program from the source code. See the [Interpret from source code](docs/INTERPRET_FROM_SOURCE.md) page.
+  
+However, binary version for Linux is being worked. So, stay tuned.
+  
+OR, regardless of your operating system, you can fire up the program from the **source code**.
 
-Unfortunately, there is no binary for **MacOS**. If you are a MacOS user, you must use the program from the source code. See the [Interpret from source code](docs/INTERPRET_FROM_SOURCE.md) page.
+```console
+python3 -m pip install -r -requirements.txt 
+```
 
-OR, regardless of your operating system, you can fire up the program from the **source code**. See the [Interpret from source code](docs/INTERPRET_FROM_SOURCE.md) page.
+```console
+python3 script.py
+```
+
+See the [Interpret from source code](docs/INTERPRET_FROM_SOURCE.md) page for more information.
 
 ## 🔨 Setting up the program
 ### 🖼 IMGUR API
@@ -26,15 +36,15 @@ After you send the form, it will redirect you to a page where it shows your **im
 
 ### 📽 ffmpeg Library
   
-Program uses ffmpeg software to add audio to some video files. However, you are **not** required to install it. Although the program can still run with no errors without the ffmpeg library, some video files might have no sound.
+Program needs **ffmpeg software** to add audio to some video files. However, installing it is **voluntary**. Although the program can still run with no errors without the ffmpeg library, some video files might have no sound.
   
-[Download ffmpeg](https://www.ffmpeg.org/download.html) manually on your system and [add the bin folder in the downloaded folder's directory to `PATH` of your system.](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/)
-
-OR install it through a package manager such as **Chocolatey** in Windows, **apt** in Linux or **Homebrew** in MacOS:
+Install it through a package manager such as **Chocolatey** in Windows, **apt** in Linux or **Homebrew** in MacOS:
 
 - **in Windows**: After you **[install Chocolatey](https://chocolatey.org/install)**, type **`choco install ffmpeg`** in either Command Promt or Powershell.
 - **in Linux**: Type **`sudo apt install ffmpeg`** in Terminal.
 - **in MacOS**: After you **[install Homebrew](https://brew.sh/)**, type **`brew install ffmpeg`** in Terminal
+
+OR, [Download ffmpeg](https://www.ffmpeg.org/download.html) manually on your system and [add the bin folder in the downloaded folder's directory to `PATH` of your system.](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/) However, package manager option is suggested.
 
 ## ⚙ Options
 
@@ -51,7 +61,7 @@ Downloads posts from given subreddit(s). Takes number of subreddit names as a pa
   
 Example usage: **`--subreddit IAmA pics --sort hot --limit 10`**
 
-## **`--multireddit`** 
+## **`--multireddit`**
 Downloads posts from given subreddit. Takes a single multireddit name as a parameter. **`--user`** option is required.
   
 Example usage: **`--multireddit myMulti --user me --sort top --time week`**
@@ -86,6 +96,8 @@ Uses a .json file to redownload posts from. Takes single directory to a .json fi
 
 Example usage: **`--log D:\pics\LOG_FILES\FAILED.json`**
 
+---
+
 ## **`--user`**
 Takes a reddit username as a parameter. Example usage: **`--user spɛz`**
   
@@ -101,6 +113,8 @@ Takes a valid time as a parameter. Valid times are `hour`, `day`, `week`, `month
 Takes a number to specify how many should program get. Upper bound is 1000 posts for **each** subreddit. For example, if you are downloading posts from pics and IAmA, the upper bound is 2000. Do not use the option to set it to highest bound possible.
 
 Example usage: **`--limit 500`**
+
+---
 
 ## **`--skip`**
 Takes a number of domains as a parameter to skip the posts from those domains. Use self to imply text posts.
