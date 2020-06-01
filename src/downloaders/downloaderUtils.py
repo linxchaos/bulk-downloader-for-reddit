@@ -57,8 +57,6 @@ def getFile(filename,shortFilename,folderDir,imageURL,indent=0, silent=False):
         opener.addheaders = headers
     urllib.request.install_opener(opener)
 
-    filename = nameCorrector(filename)
-
     if not silent: print(" "*indent + str(folderDir),
                          " "*indent + str(filename),
                          sep="\n")

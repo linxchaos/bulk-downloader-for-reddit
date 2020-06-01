@@ -5,6 +5,7 @@ import random
 
 from src.reddit import Reddit
 from src.jsonHelper import JsonFile
+from src.utils import nameCorrector
 
 class Config():
 
@@ -36,7 +37,7 @@ For example: {FLAIR}_{SUBREDDIT}_{REDDITOR}
 
 Existing filename template:""", None if "filename" not in self.file.read() else self.file.read()["filename"])
 
-        filename = input(">> ").upper()
+        filename = nameCorrector(input(">> ").upper())
         self.file.add({
             "filename": filename
         })
@@ -68,7 +69,7 @@ For example: {REDDITOR}/{SUBREDDIT}/{FLAIR}
 
 Existing folder structure""", None if "folderpath" not in self.file.read() else self.file.read()["folderpath"])
 
-        folderpath = input(">> ").strip("\\").strip("/").upper()
+        folderpath = nameCorrector(input(">> ").strip("\\").strip("/").upper())
 
         self.file.add({
             "folderpath": folderpath

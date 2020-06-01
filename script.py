@@ -177,13 +177,25 @@ def download(submissions):
               end="")
         print(f" – {submissions[i]['TYPE'].upper()}",end="",noPrint=True)
 
-        details = {**submissions[i], **{"TITLE": nameCorrector(submissions[i]['TITLE'])}}
-        directory = GLOBAL.directory / GLOBAL.config["folderpath"].format(**details)
+
+        directory = GLOBAL.directory / GLOBAL.config["folderpath"].format(**submissions[i])
+        details = {
+            **submissions[i], 
+            **{
+                "TITLE": nameCorrector(
+                    submissions[i]['TITLE'],
+                    reference = str(directory)
+                                + GLOBAL.config['filename'].format(**submissions[i])
+                                + ".ext"
+                )
+            }
+        }
+        filename = GLOBAL.config['filename'].format(**details)
 
         if isPostExists(details,directory):
             print()
             print(directory)
-            print(GLOBAL.config['filename'].format(**details))
+            print(filename)
             print("It already exists")
             duplicates += 1
             continue
