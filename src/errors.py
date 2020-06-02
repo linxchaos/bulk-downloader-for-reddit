@@ -101,3 +101,6 @@ class FailedToDownload(Exception):
 
 class TypeInSkip(Exception):
     pass
+
+class DomainInSkip(Exception):
+    pass

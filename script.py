@@ -24,7 +24,7 @@ from src.downloaders.selfPost import SelfPost
 from src.downloaders.vreddit import VReddit
 from src.downloaders.youtube import Youtube
 from src.downloaders.gifDeliveryNetwork import GifDeliveryNetwork
-from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, TypeInSkip, full_exc_info
+from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, TypeInSkip, DomainInSkip, full_exc_info
 from src.parser import LinkDesigner
 from src.searcher import getPosts
 from src.utils import (GLOBAL, createLogFile, nameCorrector,
@@ -251,6 +251,11 @@ def download(submissions):
             ]})
 
         except TypeInSkip:
+            print()
+            print(submissions[i]['CONTENTURL'])
+            print("Skipping post...")
+
+        except DomainInSkip:
             print()
             print(submissions[i]['CONTENTURL'])
             print("Skipping post...")
