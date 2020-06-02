@@ -63,9 +63,10 @@ class Imgur:
                             + "_"
                             + nameCorrector(str(images[i]['title']))
                             + "_"
-                            + images[i]['id'])
+                            + images[i]['id']
+                            + images[i]['Ext'])
 
-                shortFilename = (str(i+1) + "_" + images[i]['id'])
+                shortFilename = (str(i+1) + "_" + images[i]['id'] + images[i]['Ext'])
 
                 print("\n  ({}/{})".format(i+1,imagesLenght))
 
