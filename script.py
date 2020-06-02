@@ -24,7 +24,7 @@ from src.downloaders.selfPost import SelfPost
 from src.downloaders.vreddit import VReddit
 from src.downloaders.youtube import Youtube
 from src.downloaders.gifDeliveryNetwork import GifDeliveryNetwork
-from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, TypeInSkip, DomainInSkip, full_exc_info
+from src.errors import ImgurLimitError, NoSuitablePost, FileAlreadyExistsError, ImgurLoginError, NotADownloadableLinkError, NoSuitablePost, InvalidJSONFile, FailedToDownload, TypeInSkip, DomainInSkip, AlbumNotDownloadedCompletely, full_exc_info
 from src.parser import LinkDesigner
 from src.searcher import getPosts
 from src.utils import (GLOBAL, createLogFile, nameCorrector,
@@ -95,55 +95,7 @@ def downloadPost(SUBMISSION,directory):
 
     print()
     if SUBMISSION['TYPE'] in downloaders:
-
-        # WORKAROUND FOR IMGUR API LIMIT
-        if SUBMISSION['TYPE'] == "imgur":
-            
-            while int(time.time() - lastRequestTime) <= 2:
-                pass
-
-            credit = Imgur.get_credits()
-
-            IMGUR_RESET_TIME = credit['UserReset']-time.time()
-            USER_RESET = ("after " \
-                            + str(int(IMGUR_RESET_TIME/60)) \
-                            + " Minutes " \
-                            + str(int(IMGUR_RESET_TIME%60)) \
-                            + " Seconds") 
-            
-            if credit['ClientRemaining'] < 25 or credit['UserRemaining'] < 25:
-                printCredit = {"noPrint":False}
-            else:
-                printCredit = {"noPrint":True}
-
-            print(
-                "==> Client: {} - User: {} - Reset {}\n".format(
-                    credit['ClientRemaining'],
-                    credit['UserRemaining'],
-                    USER_RESET
-                ),end="",**printCredit
-            )
-
-            if not (credit['UserRemaining'] == 0 or \
-                    credit['ClientRemaining'] == 0):
-
-                """This block of code is needed for API workaround
-                """
-                while int(time.time() - lastRequestTime) <= 2:
-                    pass
-
-                lastRequestTime = time.time()
-
-            else:
-                if credit['UserRemaining'] == 0:
-                    KEYWORD = "user"
-                elif credit['ClientRemaining'] == 0:
-                    KEYWORD = "client"
-
-                raise ImgurLimitError('{} LIMIT EXCEEDED\n'.format(KEYWORD.upper()))
-
         downloaders[SUBMISSION['TYPE']] (directory,SUBMISSION)
-
     else:
         raise NoSuitablePost
 
@@ -239,7 +191,7 @@ def download(submissions):
 
         except NotADownloadableLinkError as exception:
             print(
-                "{class_name}: {info} See CONSOLE_LOG.txt for more information".format(
+                "{class_name}: {info}".format(
                     class_name=exception.__class__.__name__,info=str(exception)
                 )
             )
@@ -265,17 +217,26 @@ def download(submissions):
 
         except FailedToDownload:
             print("Failed to download the posts, skipping...")
+
+        except AlbumNotDownloadedCompletely:
+            print("Album did not downloaded completely.")
+            FAILED_FILE.add({int(i+1):[
+                "{class_name}: {info}".format(
+                    class_name=exc.__class__.__name__,info=str(exc)
+                ),
+                submissions[i]
+            ]})
         
         except Exception as exc:
             print(
-                "{class_name}: {info} See CONSOLE_LOG.txt for more information".format(
+                "{class_name}: {info}\nSee CONSOLE_LOG.txt for more information".format(
                     class_name=exc.__class__.__name__,info=str(exc)
                 )
             )
 
             logging.error(sys.exc_info()[0].__name__,
                           exc_info=full_exc_info(sys.exc_info()))
-            print(log_stream.getvalue(),noPrint=True)
+            print(GLOBAL.log_stream.getvalue(),noPrint=True)
 
             FAILED_FILE.add({int(i+1):[
                 "{class_name}: {info}".format(
@@ -372,7 +333,7 @@ def main():
     except Exception as exc:
         logging.error(sys.exc_info()[0].__name__,
                       exc_info=full_exc_info(sys.exc_info()))
-        print(log_stream.getvalue(),noPrint=True)
+        print(GLOBAL.log_stream.getvalue(),noPrint=True)
         print(exc)
         sys.exit()
 
@@ -384,8 +345,8 @@ def main():
 
 if __name__ == "__main__":
 
-    log_stream = StringIO()    
-    logging.basicConfig(stream=log_stream, level=logging.INFO)
+    GLOBAL.log_stream = StringIO()    
+    logging.basicConfig(stream=GLOBAL.log_stream, level=logging.INFO)
 
     try:
         VanillaPrint = print
@@ -405,6 +366,6 @@ if __name__ == "__main__":
             GLOBAL.directory = Path("..\\")
         logging.error(sys.exc_info()[0].__name__,
                       exc_info=full_exc_info(sys.exc_info()))
-        print(log_stream.getvalue())
+        print(GLOBAL.log_stream.getvalue())
 
     if not GLOBAL.arguments.quit: input("\nPress enter to quit\n")

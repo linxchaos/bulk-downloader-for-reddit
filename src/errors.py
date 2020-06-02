@@ -104,3 +104,9 @@ class TypeInSkip(Exception):
 
 class DomainInSkip(Exception):
     pass
+
+class ImageNotFound(Exception):
+    pass
+
+class ExtensionError(Exception):
+    pass
