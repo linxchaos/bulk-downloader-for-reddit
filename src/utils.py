@@ -83,17 +83,12 @@ def nameCorrector(string,reference=None):
         limit = LIMIT - referenceLenght
         string = string[:limit-1]
 
-    # stringLenght = len(string)
-    # if stringLenght > 50:
-    #     string = string[:50]
-    # stringLenght = len(string)
-
     string = string.replace(" ", "_")
     
     if len(string.split('\n')) > 1:
         string = "".join(string.split('\n'))
     
-    BAD_CHARS = ['\\','/',':','*','?','"','<','>','|','#']
+    BAD_CHARS = ['\\','/',':','*','?','"','<','>','|','#', '.', '@' ,'“', '’', '\'', '!']
     string = "".join([i if i not in BAD_CHARS else "_" for i in string])
 
     return string
