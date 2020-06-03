@@ -123,7 +123,6 @@ def download(submissions):
               end="")
         print(f" – {submissions[i]['TYPE'].upper()}",end="",noPrint=True)
 
-
         directory = GLOBAL.directory / GLOBAL.config["folderpath"].format(**submissions[i])
         details = {
             **submissions[i], 
@@ -211,7 +210,6 @@ def download(submissions):
 
         except FailedToDownload:
             print("Failed to download the posts, skipping...")
-
         except AlbumNotDownloadedCompletely:
             print("Album did not downloaded completely.")
             FAILED_FILE.add({int(i+1):[
@@ -364,3 +362,4 @@ if __name__ == "__main__":
         print(GLOBAL.log_stream.getvalue())
 
     if not GLOBAL.arguments.quit: input("\nPress enter to quit\n")
+              
