@@ -201,7 +201,7 @@ def extractDetails(posts,SINGLE_POST=False):
     """
 
     postList = []
-    postCount = 0
+    postCount = 1
 
     allPosts = {}
 
@@ -227,19 +227,17 @@ def extractDetails(posts,SINGLE_POST=False):
         except AttributeError:
             pass
 
-        result = matchWithDownloader(submission)
+        if not any(domain in submission.domain for domain in GLOBAL.arguments.skip_domain):
+            result = matchWithDownloader(submission)
 
-        if result is not None:
-            details = {**details, **result}
-            if not any(domain in submission.domain for domain in GLOBAL.arguments.skip_domain):
+            if result is not None:
+                details = {**details, **result}
                 postList.append(details)
-
-        postsFile.add({postCount:details})
+                postsFile.add({postCount:details})
 
     else:
         try:
             for submission in posts:
-                postCount += 1
 
                 if postCount % 100 == 0:
                     sys.stdout.write("• ")
@@ -265,14 +263,18 @@ def extractDetails(posts,SINGLE_POST=False):
                 except AttributeError:
                     continue
 
-                result = matchWithDownloader(submission)
+                if details['POSTID'] in GLOBAL.downloadedPosts(): continue
 
-                if result is not None:
-                    details = {**details, **result}
-                    if not any(domain in submission.domain for domain in GLOBAL.arguments.skip_domain):
+                if not any(domain in submission.domain for domain in GLOBAL.arguments.skip_domain):
+                    result = matchWithDownloader(submission)
+
+                    if result is not None:
+                        details = {**details, **result}
                         postList.append(details)
-
-                allPosts[postCount] = details
+                    
+                    allPosts[postCount] = details
+                    postCount += 1
+                
         except KeyboardInterrupt:
             print("\nKeyboardInterrupt",noPrint=True)
         

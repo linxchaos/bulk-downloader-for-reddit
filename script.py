@@ -84,9 +84,6 @@ def isPostExists(POST,directory):
 
 def downloadPost(SUBMISSION,directory):
 
-    global lastRequestTime
-    lastRequestTime = 0
-
     downloaders = {
         "imgur":Imgur,"gfycat":Gfycat,"erome":Erome,"direct":Direct,"self":SelfPost,
         "redgifs":Redgifs, "gifdeliverynetwork": GifDeliveryNetwork,
@@ -106,8 +103,6 @@ def download(submissions):
     to download each one, catch errors, update the log files
     """
 
-    global lastRequestTime
-    lastRequestTime = 0
     downloadedCount = 0
     duplicates = 0
 
@@ -116,7 +111,6 @@ def download(submissions):
     if GLOBAL.arguments.unsave:
         reddit = Reddit(GLOBAL.config['credentials']['reddit']).begin()
 
-    submissions = list(filter(lambda x: x['POSTID'] not in GLOBAL.downloadedPosts(), submissions))
     subsLenght = len(submissions)
         
     for i in range(len(submissions)):
