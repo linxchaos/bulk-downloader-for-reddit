@@ -147,7 +147,13 @@ class Arguments:
         parser.add_argument("--downloaded-posts",
                             help="Use a hash file to keep track of downloaded files",
                             type=str
-                            ) 
+                            )
+
+        parser.add_argument("--no-download",
+                            action="store_true",
+                            help="Just saved posts into a the POSTS.json file without downloading"
+                            )
+   
 
         if arguments == []:
             return parser.parse_args()

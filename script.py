@@ -341,7 +341,8 @@ def main():
         print("I could not find any posts in that URL")
         sys.exit()
 
-    download(posts)
+    if GLOBAL.arguments.no_download: pass
+    else: download(posts)
 
 if __name__ == "__main__":
 
