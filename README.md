@@ -39,6 +39,8 @@ There is also a complete ready to go Docker integration. Install **Docker** and 
 ### `docker-compose run --service-ports bdfr`
 And you'll find youself right in the app. The files will be downloaded to `downloads/`. Since it is docker, you may want to change the ownership of the files once you're done (belongs to root by default).
 
+_Credits to [wAuner](https://github.com/wAuner)_
+
 ## ⚙ Options
 
 Some of the below features are available only through command-line.
