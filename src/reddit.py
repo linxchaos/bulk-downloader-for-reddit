@@ -30,11 +30,11 @@ class Reddit:
                 self.redditInstance.auth.scopes()
                 return self.redditInstance
             except ResponseException:
-                self.arguments["redirect_uri"] = "http://localhost:" + str(self.PORT)
+                self.arguments["redirect_uri"] = "http://0.0.0.0:" + str(self.PORT)
                 self.redditInstance = praw.Reddit(**self.arguments)
                 reddit, refresh_token = self.getRefreshToken(*self.SCOPES)
         else:
-            self.arguments["redirect_uri"] = "http://localhost:" + str(self.PORT)
+            self.arguments["redirect_uri"] = "http://0.0.0.0:" + str(self.PORT)
             self.redditInstance = praw.Reddit(**self.arguments)
             reddit, refresh_token = self.getRefreshToken(*self.SCOPES)
 
@@ -51,7 +51,7 @@ class Reddit:
         """
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server.bind(('localhost', self.PORT))
+        server.bind(('0.0.0.0', self.PORT))
         server.listen(1)
         client = server.accept()[0]
         server.close()
