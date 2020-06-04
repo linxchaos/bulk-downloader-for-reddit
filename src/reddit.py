@@ -30,11 +30,11 @@ class Reddit:
                 self.redditInstance.auth.scopes()
                 return self.redditInstance
             except ResponseException:
-                self.arguments["redirect_uri"] = "http://0.0.0.0:" + str(self.PORT)
+                self.arguments["redirect_uri"] = "http://localhost:" + str(self.PORT)
                 self.redditInstance = praw.Reddit(**self.arguments)
                 reddit, refresh_token = self.getRefreshToken(*self.SCOPES)
         else:
-            self.arguments["redirect_uri"] = "http://0.0.0.0:" + str(self.PORT)
+            self.arguments["redirect_uri"] = "http://localhost:" + str(self.PORT)
             self.redditInstance = praw.Reddit(**self.arguments)
             reddit, refresh_token = self.getRefreshToken(*self.SCOPES)
 
