@@ -20,6 +20,7 @@ from src.errors import (NoMatchingSubmissionFound, NoPrawSupport,
 
 print = printToFile
 
+
 def getPosts(programMode):
     """Call PRAW regarding to arguments and pass it to extractDetails.
     Return what extractDetails has returned.
@@ -42,26 +43,26 @@ def getPosts(programMode):
     if not "search" in programMode:
         if programMode["sort"] == "top" or programMode["sort"] == "controversial":
             keyword_params = {
-                "time_filter":programMode["time"],
-                "limit":programMode["limit"]
+                "time_filter": programMode["time"],
+                "limit": programMode["limit"]
             }
         # OTHER SORT TYPES DON'T TAKE TIME_FILTER
         else:
             keyword_params = {
-                "limit":programMode["limit"]
+                "limit": programMode["limit"]
             }
     else:
         keyword_params = {
-                "time_filter":programMode["time"],
-                "limit":programMode["limit"]
-            }
+            "time_filter": programMode["time"],
+            "limit": programMode["limit"]
+        }
 
     if "search" in programMode:
-        if programMode["sort"] in ["hot","rising","controversial"]:
+        if programMode["sort"] in ["hot", "rising", "controversial"]:
             raise InvalidSortingType("Invalid sorting type has given")
 
         if "subreddit" in programMode:
-            print (
+            print(
                 "search for \"{search}\" in\n" \
                 "subreddit: {subreddit}\nsort: {sort}\n" \
                 "time: {time}\nlimit: {limit}\n".format(
@@ -70,8 +71,8 @@ def getPosts(programMode):
                     sort=programMode["sort"],
                     subreddit=programMode["subreddit"],
                     time=programMode["time"]
-                ).upper(),noPrint=True
-            )            
+                ).upper(), noPrint=True
+            )
             return extractDetails(
                 reddit.subreddit(programMode["subreddit"]).search(
                     programMode["search"],
@@ -83,13 +84,13 @@ def getPosts(programMode):
 
         elif "multireddit" in programMode:
             raise NoPrawSupport("PRAW does not support that")
-        
+
         elif "user" in programMode:
             raise NoPrawSupport("PRAW does not support that")
 
         elif "saved" in programMode:
             raise ("Reddit does not support that")
-    
+
     if programMode["sort"] == "relevance":
         raise InvalidSortingType("Invalid sorting type has given")
 
@@ -98,7 +99,7 @@ def getPosts(programMode):
             "saved posts\nuser:{username}\nlimit={limit}\n".format(
                 username=reddit.user.me(),
                 limit=programMode["limit"]
-            ).upper(),noPrint=True
+            ).upper(), noPrint=True
         )
         return extractDetails(reddit.user.me().saved(limit=programMode["limit"]))
 
@@ -106,37 +107,37 @@ def getPosts(programMode):
 
         if programMode["subreddit"] == "frontpage":
 
-            print (
+            print(
                 "subreddit: {subreddit}\nsort: {sort}\n" \
                 "time: {time}\nlimit: {limit}\n".format(
                     limit=programMode["limit"],
                     sort=programMode["sort"],
                     subreddit=programMode["subreddit"],
                     time=programMode["time"]
-                ).upper(),noPrint=True
+                ).upper(), noPrint=True
             )
             return extractDetails(
-                getattr(reddit.front,programMode["sort"]) (**keyword_params)
+                getattr(reddit.front, programMode["sort"])(**keyword_params)
             )
 
-        else:  
-            print (
+        else:
+            print(
                 "subreddit: {subreddit}\nsort: {sort}\n" \
                 "time: {time}\nlimit: {limit}\n".format(
                     limit=programMode["limit"],
                     sort=programMode["sort"],
                     subreddit=programMode["subreddit"],
                     time=programMode["time"]
-                ).upper(),noPrint=True
+                ).upper(), noPrint=True
             )
             return extractDetails(
                 getattr(
-                    reddit.subreddit(programMode["subreddit"]),programMode["sort"]
-                ) (**keyword_params)
+                    reddit.subreddit(programMode["subreddit"]), programMode["sort"]
+                )(**keyword_params)
             )
 
     elif "multireddit" in programMode:
-        print (
+        print(
             "user: {user}\n" \
             "multireddit: {multireddit}\nsort: {sort}\n" \
             "time: {time}\nlimit: {limit}\n".format(
@@ -145,41 +146,41 @@ def getPosts(programMode):
                 sort=programMode["sort"],
                 multireddit=programMode["multireddit"],
                 time=programMode["time"]
-            ).upper(),noPrint=True
+            ).upper(), noPrint=True
         )
         try:
             return extractDetails(
                 getattr(
                     reddit.multireddit(
                         programMode["user"], programMode["multireddit"]
-                    ),programMode["sort"]
-                ) (**keyword_params)
+                    ), programMode["sort"]
+                )(**keyword_params)
             )
         except NotFound:
             raise MultiredditNotFound("Multireddit not found")
 
     elif "submitted" in programMode:
-        print (
+        print(
             "submitted posts of {user}\nsort: {sort}\n" \
             "time: {time}\nlimit: {limit}\n".format(
                 limit=programMode["limit"],
                 sort=programMode["sort"],
                 user=programMode["user"],
                 time=programMode["time"]
-            ).upper(),noPrint=True
+            ).upper(), noPrint=True
         )
         return extractDetails(
             getattr(
-                reddit.redditor(programMode["user"]).submissions,programMode["sort"]
-            ) (**keyword_params)
+                reddit.redditor(programMode["user"]).submissions, programMode["sort"]
+            )(**keyword_params)
         )
 
     elif "upvoted" in programMode:
-        print (
+        print(
             "upvoted posts of {user}\nlimit: {limit}\n".format(
                 user=programMode["user"],
                 limit=programMode["limit"]
-            ).upper(),noPrint=True
+            ).upper(), noPrint=True
         )
         try:
             return extractDetails(
@@ -189,12 +190,13 @@ def getPosts(programMode):
             raise InsufficientPermission("You do not have permission to do that")
 
     elif "post" in programMode:
-        print("post: {post}\n".format(post=programMode["post"]).upper(),noPrint=True)
+        print("post: {post}\n".format(post=programMode["post"]).upper(), noPrint=True)
         return extractDetails(
-            reddit.submission(url=programMode["post"]),SINGLE_POST=True
+            reddit.submission(url=programMode["post"]), SINGLE_POST=True
         )
 
-def extractDetails(posts,SINGLE_POST=False):
+
+def extractDetails(posts, SINGLE_POST=False):
     """Check posts and decide if it can be downloaded.
     If so, create a dictionary with post details and append them to a list.
     Write all of posts to file. Return the list
@@ -210,20 +212,24 @@ def extractDetails(posts,SINGLE_POST=False):
 
     if SINGLE_POST:
         submission = posts
-        postCount += 1 
+        postCount += 1
+        # All options offered by PRAW are author, clicked, comments, created_utc, distinguished, edited, id,
+        # is_original_content, is_self, link_flair_template_id, link_flair_text, locked, name, num_comments, over_18,
+        # permalink, poll_data, score, selftext, spoiler, stickied, subreddit, title, upvote_ratio, url
         try:
-            details = {'POSTID':submission.id,
-                       'TITLE':submission.title,
-                       'REDDITOR':str(submission.author),
-                       'TYPE':None,
-                       'CONTENTURL':submission.url,
-                       'SUBREDDIT':submission.subreddit.display_name,
+            details = {'POSTID': submission.id,
+                       'TITLE': submission.title,
+                       'REDDITOR': str(submission.author),
+                       'TYPE': None,
+                       'CONTENTURL': submission.url,
+                       'SUBREDDIT': submission.subreddit.display_name,
                        'UPVOTES': submission.score,
-                       'FLAIR':submission.link_flair_text,
-                       'DATE':str(time.strftime(
-                                      "%Y-%m-%d_%H-%M",
-                                      time.localtime(submission.created_utc)
-                                      ))}
+                       'FLAIR': submission.link_flair_text,
+                       'OVER18': submission.over_18,
+                       'DATE': str(time.strftime(
+                           "%Y-%m-%d_%H-%M",
+                           time.localtime(submission.created_utc)
+                       ))}
         except AttributeError:
             pass
 
@@ -233,7 +239,7 @@ def extractDetails(posts,SINGLE_POST=False):
             if result is not None:
                 details = {**details, **result}
                 postList.append(details)
-                postsFile.add({postCount:details})
+                postsFile.add({postCount: details})
 
     else:
         try:
@@ -244,40 +250,43 @@ def extractDetails(posts,SINGLE_POST=False):
                     sys.stdout.flush()
 
                 if postCount % 1000 == 0:
-                    sys.stdout.write("\n"+" "*14)
+                    sys.stdout.write("\n" + " " * 14)
                     sys.stdout.flush()
 
                 try:
-                    details = {'POSTID':submission.id,
-                            'TITLE':submission.title,
-                            'REDDITOR':str(submission.author),
-                            'TYPE':None,
-                            'CONTENTURL':submission.url,
-                            'SUBREDDIT':submission.subreddit.display_name,
-                            'UPVOTES': submission.score,
-                            'FLAIR':submission.link_flair_text,
-                            'DATE':str(time.strftime(
-                                      "%Y-%m-%d_%H-%M",
-                                      time.localtime(submission.created_utc)
-                                      ))}
+                    details = {'POSTID': submission.id,
+                               'TITLE': submission.title,
+                               'REDDITOR': str(submission.author),
+                               'TYPE': None,
+                               'CONTENTURL': submission.url,
+                               'SUBREDDIT': submission.subreddit.display_name,
+                               'UPVOTES': submission.score,
+                               'FLAIR': submission.link_flair_text,
+                               'OVER18': submission.over_18,
+                               'DATE': str(time.strftime(
+                                   "%Y-%m-%d_%H-%M",
+                                   time.localtime(submission.created_utc)
+                               ))}
                 except AttributeError:
                     continue
 
+                # Check if the grabbed POSTID is already in the downloadedPosts from Prior runs, if enabled
                 if details['POSTID'] in GLOBAL.downloadedPosts(): continue
 
+                # Check to make sure the post is not in the skip_domain list
                 if not any(domain in submission.domain for domain in GLOBAL.arguments.skip_domain):
                     result = matchWithDownloader(submission)
 
                     if result is not None:
                         details = {**details, **result}
                         postList.append(details)
-                    
+
                     allPosts[postCount] = details
                     postCount += 1
-                
+
         except KeyboardInterrupt:
-            print("\nKeyboardInterrupt",noPrint=True)
-        
+            print("\nKeyboardInterrupt", noPrint=True)
+
         postsFile.add(allPosts)
 
     if not len(postList) == 0:
@@ -286,33 +295,33 @@ def extractDetails(posts,SINGLE_POST=False):
     else:
         raise NoMatchingSubmissionFound("No matching submission was found")
 
-def matchWithDownloader(submission):
 
+def matchWithDownloader(submission):
     directLink = extractDirectLink(submission.url)
     if directLink:
-         return {'TYPE': 'direct',
-                 'CONTENTURL': directLink}
+        return {'TYPE': 'direct',
+                'CONTENTURL': directLink}
 
     if 'v.redd.it' in submission.domain:
-        bitrates = ["DASH_1080","DASH_720","DASH_600", \
-                    "DASH_480","DASH_360","DASH_240"]
-                    
-        for bitrate in bitrates:
-            videoURL = submission.url+"/"+bitrate
+        bitrates = ["DASH_1080", "DASH_720", "DASH_600", \
+                    "DASH_480", "DASH_360", "DASH_240"]
 
-            try:    
+        for bitrate in bitrates:
+            videoURL = submission.url + "/" + bitrate
+
+            try:
                 responseCode = urllib.request.urlopen(videoURL).getcode()
             except urllib.error.HTTPError:
                 responseCode = 0
 
             if responseCode == 200:
-                return {'TYPE': 'v.redd.it', 'CONTENTURL': videoURL}    
+                return {'TYPE': 'v.redd.it', 'CONTENTURL': videoURL}
 
     if 'gfycat' in submission.domain:
         return {'TYPE': 'gfycat'}
 
     if 'youtube' in submission.domain \
-        and 'watch' in submission.url:
+            and 'watch' in submission.url:
         return {'TYPE': 'youtube'}
 
     if 'youtu.be' in submission.domain:
@@ -336,13 +345,14 @@ def matchWithDownloader(submission):
         return {'TYPE': 'self',
                 'CONTENT': submission.selftext}
 
+
 def extractDirectLink(URL):
     """Check if link is a direct image link.
     If so, return URL,
     if not, return False
     """
 
-    imageTypes = ['.jpg','.png','.mp4','.webm','.gif']
+    imageTypes = ['.jpg', '.png', '.mp4', '.webm', '.gif']
     if URL[-1] == "/":
         URL = URL[:-1]
 
@@ -353,4 +363,4 @@ def extractDirectLink(URL):
         if extension in URL.split("/")[-1]:
             return URL
     else:
-        return  None
+        return None

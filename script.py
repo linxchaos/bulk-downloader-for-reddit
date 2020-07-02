@@ -38,8 +38,8 @@ from src.store import Store
 
 __author__ = "Ali Parlakci"
 __license__ = "GPL"
-__version__ = "1.9.1"
-__maintainer__ = "Ali Parlakci"
+__version__ = "1.9.1.1"
+__maintainer__ = "Nick Franklin"
 __email__ = "parlakciali@gmail.com"
 
 def postFromLog(fileName):
@@ -70,7 +70,7 @@ def isPostExists(POST,directory):
 
     filename = GLOBAL.config['filename'].format(**POST)
 
-    possibleExtensions = [".jpg",".png",".mp4",".gif",".webm",".md",".mkv",".flv"]
+    possibleExtensions = [".jpg",".png",".mp4",".gif",".webm",".md",".mkv",".flv",".jpeg"]
 
     for extension in possibleExtensions:
 
@@ -112,20 +112,30 @@ def download(submissions):
         reddit = Reddit(GLOBAL.config['credentials']['reddit']).begin()
 
     subsLenght = len(submissions)
-        
+
     for i in range(len(submissions)):
         print(f"\n({i+1}/{subsLenght})",end=" — ")
         print(submissions[i]['POSTID'],
               f"r/{submissions[i]['SUBREDDIT']}",
               f"u/{submissions[i]['REDDITOR']}",
               submissions[i]['FLAIR'] if submissions[i]['FLAIR'] else "",
+              f"NSFW" if {submissions[i]['OVER18']} else "SFW",
               sep=" — ",
               end="")
         print(f" – {submissions[i]['TYPE'].upper()}",end="",noPrint=True)
 
+        # If you have the Flair in the Directory name, and the flair has a colon or other bad character, it will crash
+        # the program, first at isPostExists. This checks for flair, then runs nameCorrector to get rid of the bad
+        # characters, if there are any. Then it builds the directory.
+        # TODO, if blah blah is not None AND FLAIR in folderpath
+        # TODO or tokenize the folderpath config and run that that through namecorrector?
+        if submissions[i]['FLAIR'] is not None:
+            submissions[i]['FLAIR'] = nameCorrector(submissions[i]['FLAIR'])
+
         directory = GLOBAL.directory / GLOBAL.config["folderpath"].format(**submissions[i])
+
         details = {
-            **submissions[i], 
+            **submissions[i],
             **{
                 "TITLE": nameCorrector(
                     submissions[i]['TITLE'],
@@ -135,6 +145,7 @@ def download(submissions):
                 )
             }
         }
+
         filename = GLOBAL.config['filename'].format(**details)
 
         if isPostExists(details,directory):
@@ -160,9 +171,9 @@ def download(submissions):
             except InsufficientScope:
                 reddit = Reddit().begin()
                 reddit.submission(id=details['POSTID']).unsave()
-              
+
             downloadedCount += 1
-              
+
         except FileAlreadyExistsError:
             print("It already exists")
             duplicates += 1
@@ -218,7 +229,7 @@ def download(submissions):
                 ),
                 submissions[i]
             ]})
-        
+
         except Exception as exc:
             print(
                 "{class_name}: {info}\nSee CONSOLE_LOG.txt for more information".format(
@@ -296,7 +307,7 @@ def main():
     if arguments.use_local_config:
         JsonFile("config.json").add(GLOBAL.config)
         sys.exit()
-        
+
     if arguments.directory:
         GLOBAL.directory = Path(arguments.directory.strip())
     elif "default_directory" in GLOBAL.config and GLOBAL.config["default_directory"] != "":
@@ -338,7 +349,7 @@ def main():
 
 if __name__ == "__main__":
 
-    GLOBAL.log_stream = StringIO()    
+    GLOBAL.log_stream = StringIO()
     logging.basicConfig(stream=GLOBAL.log_stream, level=logging.INFO)
 
     try:
@@ -353,7 +364,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         if GLOBAL.directory is None:
             GLOBAL.directory = Path("..\\")
-        
+
     except Exception as exception:
         if GLOBAL.directory is None:
             GLOBAL.directory = Path("..\\")
@@ -362,4 +373,3 @@ if __name__ == "__main__":
         print(GLOBAL.log_stream.getvalue())
 
     if not GLOBAL.arguments.quit: input("\nPress enter to quit\n")
-              

@@ -7,9 +7,10 @@ from src.reddit import Reddit
 from src.jsonHelper import JsonFile
 from src.utils import nameCorrector
 
+
 class Config():
 
-    def __init__(self,filename):
+    def __init__(self, filename):
         self.filename = filename
         self.file = JsonFile(self.filename)
 
@@ -65,7 +66,7 @@ Use slash or DOUBLE backslash to separate folders
 You can use SUBREDDIT, REDDITOR, POSTID, TITLE, UPVOTES, FLAIR, DATE in curly braces
 The text in curly braces will be replaced with the corresponding property of an each post
 
-For example: {REDDITOR}/{SUBREDDIT}/{FLAIR}
+For example: {REDDITOR}\{SUBREDDIT}\{FLAIR}
 
 Existing folder structure""", None if "folderpath" not in self.file.read() else self.file.read()["folderpath"])
 
@@ -75,7 +76,7 @@ Existing folder structure""", None if "folderpath" not in self.file.read() else 
             "folderpath": folderpath
         })
 
-    def _readCustomFolderPath(self,path=None):
+    def _readCustomFolderPath(self, path=None):
         content = self.file.read()
         if not "folderpath" in content:
             self.file.add({
@@ -96,7 +97,7 @@ Existing default options:""", None if "options" not in self.file.read() else sel
             "options": options
         })
 
-    def _readDefaultOptions(self,path=None):
+    def _readDefaultOptions(self, path=None):
         content = self.file.read()
         if not "options" in content:
             self.file.add({
@@ -110,23 +111,24 @@ Existing default options:""", None if "options" not in self.file.read() else sel
             content = self.file.read()["credentials"]
         except:
             self.file.add({
-                "credentials":{}
+                "credentials": {}
             })
             content = self.file.read()["credentials"]
-            
+
         if "reddit" in content and len(content["reddit"]) != 0:
             pass
         else:
             Reddit().begin()
-            
+
         print()
 
     def setDefaultDirectory(self):
         print("""Set a default directory to use in case no directory is given
-Leave blank to reset it. You can use {time} in foler names to use to timestamp it
+Leave blank to reset it. You can use {time} in folder names to use to timestamp it
 For example: D:/archive/BDFR_{time}
 """)
-        print("Current default directory:", self.file.read()["default_directory"] if "default_directory" in self.file.read() else "")
+        print("Current default directory:",
+              self.file.read()["default_directory"] if "default_directory" in self.file.read() else "")
         self.file.add({
             "default_directory": input(">> ")
         })

@@ -105,6 +105,9 @@ class TypeInSkip(Exception):
 class DomainInSkip(Exception):
     pass
 
+class AlreadyDownloaded(Exception):
+    pass
+
 class ImageNotFound(Exception):
     pass
 

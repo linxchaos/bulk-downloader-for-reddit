@@ -8,18 +8,19 @@ from src.utils import GLOBAL, nameCorrector
 from src.utils import printToFile as print
 from src.downloaders.Direct import Direct
 from src.downloaders.downloaderUtils import getFile
-from src.errors import FileNotFoundError, FileAlreadyExistsError, AlbumNotDownloadedCompletely, ImageNotFound, ExtensionError, NotADownloadableLinkError, TypeInSkip
+from src.errors import FileNotFoundError, FileAlreadyExistsError, AlbumNotDownloadedCompletely, ImageNotFound, \
+    ExtensionError, NotADownloadableLinkError, TypeInSkip
+
 
 class Imgur:
-
     IMGUR_IMAGE_DOMAIN = "https://i.imgur.com/"
 
-    def __init__(self,directory, post):
+    def __init__(self, directory, post):
 
         link = post['CONTENTURL']
 
         if link.endswith(".gifv"):
-            link = link.replace(".gifv",".mp4")
+            link = link.replace(".gifv", ".mp4")
             Direct(directory, {**post, 'CONTENTURL': link})
             return None
 
@@ -60,19 +61,19 @@ class Imgur:
             imageURL = self.IMGUR_IMAGE_DOMAIN + images["images"][i]["hash"] + extension
 
             filename = "_".join([
-                str(i+1), nameCorrector(images["images"][i]['title']), images["images"][i]['hash']
+                str(i + 1), nameCorrector(images["images"][i]['title']), images["images"][i]['hash']
             ]) + extension
-            shortFilename = str(i+1) + "_" + images["images"][i]['hash']
+            shortFilename = str(i + 1) + "_" + images["images"][i]['hash']
 
-            print("\n  ({}/{})".format(i+1,imagesLenght))
+            print("\n  ({}/{})".format(i + 1, imagesLenght))
 
             try:
-                getFile(filename,shortFilename,folderDir,imageURL,indent=2)
+                getFile(filename, shortFilename, folderDir, imageURL, indent=2)
                 howManyDownloaded += 1
                 print()
 
             except FileAlreadyExistsError:
-                print("  The file already exists" + " "*10,end="\n\n")
+                print("  The file already exists" + " " * 10, end="\n\n")
                 duplicates += 1
 
             except TypeInSkip:
@@ -89,31 +90,31 @@ class Imgur:
                     )
                     + "\n"
                 )
-                print(GLOBAL.log_stream.getvalue(),noPrint=True)
+                print(GLOBAL.log_stream.getvalue(), noPrint=True)
 
         if duplicates == imagesLenght:
             raise FileAlreadyExistsError
         elif howManyDownloaded + duplicates < imagesLenght:
             raise AlbumNotDownloadedCompletely(
                 "Album Not Downloaded Completely"
-            )           
+            )
 
-    def download(self, image):        
+    def download(self, image):
         extension = self.validateExtension(image["ext"])
         imageURL = self.IMGUR_IMAGE_DOMAIN + image["hash"] + extension
 
         filename = GLOBAL.config['filename'].format(**self.post) + extension
-        shortFilename = self.post['POSTID']+extension
-        
-        getFile(filename,shortFilename,self.directory,imageURL)
+        shortFilename = self.post['POSTID'] + extension
+
+        getFile(filename, shortFilename, self.directory, imageURL)
 
     @property
     def isAlbum(self):
         return "album_images" in self.rawData
 
-    @staticmethod 
+    @staticmethod
     def getData(link):
-        
+
         cookies = {"over18": "1"}
         res = requests.get(link, cookies=cookies)
         if res.status_code != 200: raise ImageNotFound(f"Server responded with {res.status_code} to {link}")
@@ -135,8 +136,9 @@ class Imgur:
 
     @staticmethod
     def validateExtension(string):
-        POSSIBLE_EXTENSIONS = [".jpg", ".png", ".mp4", ".gif"]
+        POSSIBLE_EXTENSIONS = [".jpg", ".png", ".mp4", ".gif", ".jpeg"]
 
         for extension in POSSIBLE_EXTENSIONS:
             if extension in string: return extension
-        else: raise ExtensionError(f"\"{string}\" is not recognized as a valid extension.")
+        else:
+            raise ExtensionError(f"\"{string}\" is not recognized as a valid extension.")
